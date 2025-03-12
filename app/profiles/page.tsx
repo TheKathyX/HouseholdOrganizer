@@ -1,0 +1,127 @@
+import Link from "next/link"
+import Image from "next/image"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { Home, Plus } from "lucide-react"
+
+export default function ProfilesPage() {
+  // Sample family members data
+  const familyMembers = [
+    {
+      id: "1",
+      name: "John Smith",
+      role: "Parent",
+      tasksCompleted: 15,
+      avatar: "/placeholder.svg?height=100&width=100",
+    },
+    {
+      id: "2",
+      name: "Sarah Smith",
+      role: "Parent",
+      tasksCompleted: 18,
+      avatar: "/placeholder.svg?height=100&width=100",
+    },
+    {
+      id: "3",
+      name: "Emma Smith",
+      role: "Child",
+      tasksCompleted: 8,
+      avatar: "/placeholder.svg?height=100&width=100",
+    },
+    {
+      id: "4",
+      name: "Michael Smith",
+      role: "Child",
+      tasksCompleted: 6,
+      avatar: "/placeholder.svg?height=100&width=100",
+    },
+  ]
+
+  return (
+    <div className="flex min-h-screen flex-col">
+      <header className="sticky top-0 z-10 border-b bg-background/95 backdrop-blur">
+        <div className="container flex h-16 items-center justify-between py-4">
+          <div className="flex items-center gap-2">
+            <Home className="h-6 w-6" />
+            <h1 className="text-xl font-bold">HomeHub</h1>
+          </div>
+          <nav className="hidden md:flex gap-6">
+            <Link href="/" className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary">
+              Dashboard
+            </Link>
+            <Link href="/profiles" className="text-sm font-medium transition-colors hover:text-primary">
+              Profiles
+            </Link>
+            <Link
+              href="/inventory"
+              className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
+            >
+              Inventory
+            </Link>
+            <Link
+              href="/tasks"
+              className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
+            >
+              Tasks
+            </Link>
+            <Link
+              href="/calendar"
+              className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
+            >
+              Calendar
+            </Link>
+          </nav>
+        </div>
+      </header>
+      <main className="flex-1">
+        <div className="container py-8">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-3xl font-bold tracking-tight">Family Profiles</h2>
+            <Button>
+              <Plus className="mr-2 h-4 w-4" /> Add Family Member
+            </Button>
+          </div>
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+            {familyMembers.map((member) => (
+              <Card key={member.id} className="overflow-hidden">
+                <CardHeader className="p-0">
+                  <div className="bg-muted h-24 flex items-center justify-center">
+                    <Image
+                      src={member.avatar || "/placeholder.svg"}
+                      alt={member.name}
+                      width={100}
+                      height={100}
+                      className="rounded-full border-4 border-background"
+                    />
+                  </div>
+                </CardHeader>
+                <CardContent className="p-6 text-center">
+                  <CardTitle>{member.name}</CardTitle>
+                  <CardDescription>{member.role}</CardDescription>
+                  <div className="mt-4 text-sm">
+                    <p>Tasks Completed: {member.tasksCompleted}</p>
+                  </div>
+                </CardContent>
+                <CardFooter className="flex justify-center border-t p-4">
+                  <Link href={`/profiles/${member.id}`} className="w-full">
+                    <Button variant="outline" size="sm" className="w-full">
+                      View Profile
+                    </Button>
+                  </Link>
+                </CardFooter>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </main>
+      <footer className="border-t py-6">
+        <div className="container flex flex-col items-center justify-between gap-4 md:flex-row">
+          <p className="text-center text-sm leading-loose text-muted-foreground md:text-left">
+            &copy; {new Date().getFullYear()} HomeHub. All rights reserved.
+          </p>
+        </div>
+      </footer>
+    </div>
+  )
+}
+
