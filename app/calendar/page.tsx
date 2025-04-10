@@ -204,18 +204,18 @@ export default function CalendarPage() {
             </Dialog>
           </div>
 
-          <div className="grid gap-6 md:grid-cols-[3fr_400px] h-[calc(100vh-13rem)]">
+          <div className="grid gap-6 md:grid-cols-[4fr_400px] h-[calc(100vh-13rem)]">
             <Card className="h-full">
               <CardHeader className="pb-4">
                 <CardTitle>Calendar</CardTitle>
                 <CardDescription>View and manage family events</CardDescription>
               </CardHeader>
-              <CardContent className="flex justify-center h-[calc(100%-5rem)]">
+              <CardContent className="flex justify-center h-[calc(100%-5rem)] p-0">
                 <Calendar
                   mode="single"
                   selected={date}
                   onSelect={(newDate) => newDate && setDate(newDate)}
-                  className="rounded-md border w-full h-full p-6 [&_.rdp-caption]:text-xl [&_.rdp-cell]:text-lg [&_.rdp-head_th]:text-lg [&_.rdp-button]:w-16 [&_.rdp-button]:h-16 [&_.rdp-nav]:h-16 [&_.rdp-nav_button]:w-16 [&_.rdp-nav_button]:h-16 [&_.rdp]:h-full [&_.rdp-months]:h-full [&_.rdp-month]:h-full [&_.rdp-table]:h-full"
+                  className="rounded-md border w-full h-full p-8 [&_.rdp-caption]:text-2xl [&_.rdp-cell]:text-xl [&_.rdp-head_th]:text-xl [&_.rdp-button]:w-20 [&_.rdp-button]:h-20 [&_.rdp-nav]:h-20 [&_.rdp-nav_button]:w-20 [&_.rdp-nav_button]:h-20 [&_.rdp]:h-full [&_.rdp-months]:h-full [&_.rdp-month]:h-full [&_.rdp-table]:h-full [&_.rdp-table]:w-full"
                 />
               </CardContent>
             </Card>
