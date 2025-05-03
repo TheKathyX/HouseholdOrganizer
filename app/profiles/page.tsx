@@ -1,12 +1,40 @@
-import Link from "next/link"
-import Image from "next/image"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
-import { Home, Plus } from "lucide-react"
+"use client";
+
+import Link from "next/link";
+import Image from "next/image";
+import { useState } from "react";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Home, Plus } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export default function ProfilesPage() {
   // Sample family members data
-  const familyMembers = [
+  const [familyMembers, setFamilyMembers] = useState([
     {
       id: "1",
       name: "John Smith",
@@ -35,7 +63,35 @@ export default function ProfilesPage() {
       tasksCompleted: 6,
       avatar: "/placeholder.svg?height=100&width=100",
     },
-  ]
+  ]);
+
+  // State for new family member
+  const [newMember, setNewMember] = useState({
+    name: "",
+    role: "Child",
+    avatar: "/placeholder.svg?height=100&width=100",
+  });
+
+  // Add new family member
+  const addFamilyMember = () => {
+    if (newMember.name.trim() === "") return;
+
+    setFamilyMembers([
+      ...familyMembers,
+      {
+        id: (familyMembers.length + 1).toString(),
+        ...newMember,
+        tasksCompleted: 0,
+      },
+    ]);
+
+    // Reset form
+    setNewMember({
+      name: "",
+      role: "Child",
+      avatar: "/placeholder.svg?height=100&width=100",
+    });
+  };
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -46,10 +102,16 @@ export default function ProfilesPage() {
             <h1 className="text-xl font-bold">HomeHub</h1>
           </div>
           <nav className="hidden md:flex gap-6">
-            <Link href="/" className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary">
+            <Link
+              href="/"
+              className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
+            >
               Dashboard
             </Link>
-            <Link href="/profiles" className="text-sm font-medium transition-colors hover:text-primary">
+            <Link
+              href="/profiles"
+              className="text-sm font-medium transition-colors hover:text-primary"
+            >
               Profiles
             </Link>
             <Link
@@ -76,10 +138,61 @@ export default function ProfilesPage() {
       <main className="flex-1">
         <div className="container py-8">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-3xl font-bold tracking-tight">Family Profiles</h2>
-            <Button>
-              <Plus className="mr-2 h-4 w-4" /> Add Family Member
-            </Button>
+            <h2 className="text-3xl font-bold tracking-tight">
+              Family Profiles
+            </h2>
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button>
+                  <Plus className="mr-2 h-4 w-4" /> Add Family Member
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-[425px]">
+                <DialogHeader>
+                  <DialogTitle>Add New Family Member</DialogTitle>
+                  <DialogDescription>
+                    Create a new profile for a family member.
+                  </DialogDescription>
+                </DialogHeader>
+                <div className="grid gap-4 py-4">
+                  <div className="grid gap-2">
+                    <Label htmlFor="member-name">Name</Label>
+                    <Input
+                      id="member-name"
+                      placeholder="Enter family member's name"
+                      value={newMember.name}
+                      onChange={(e) =>
+                        setNewMember({ ...newMember, name: e.target.value })
+                      }
+                    />
+                  </div>
+                  <div className="grid gap-2">
+                    <Label htmlFor="member-role">Role</Label>
+                    <Select
+                      value={newMember.role}
+                      onValueChange={(value) =>
+                        setNewMember({ ...newMember, role: value })
+                      }
+                    >
+                      <SelectTrigger id="member-role">
+                        <SelectValue placeholder="Select role" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="Parent">Parent</SelectItem>
+                        <SelectItem value="Child">Child</SelectItem>
+                        <SelectItem value="Grandparent">Grandparent</SelectItem>
+                        <SelectItem value="Other">Other</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </div>
+                <DialogFooter>
+                  <Button type="submit" onClick={addFamilyMember}>
+                    Add Family Member
+                  </Button>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
           </div>
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
             {familyMembers.map((member) => (
@@ -122,6 +235,5 @@ export default function ProfilesPage() {
         </div>
       </footer>
     </div>
-  )
+  );
 }
-
