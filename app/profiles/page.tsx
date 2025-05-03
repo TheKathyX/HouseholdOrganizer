@@ -33,6 +33,8 @@ import {
 } from "@/components/ui/select";
 
 export default function ProfilesPage() {
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
   // Sample family members data
   const [familyMembers, setFamilyMembers] = useState([
     {
@@ -91,6 +93,9 @@ export default function ProfilesPage() {
       role: "Child",
       avatar: "/placeholder.svg?height=100&width=100",
     });
+
+    // Close dialog
+    setIsDialogOpen(false);
   };
 
   return (
@@ -147,50 +152,58 @@ export default function ProfilesPage() {
                   <Plus className="mr-2 h-4 w-4" /> Add Family Member
                 </Button>
               </DialogTrigger>
-              <DialogContent className="sm:max-w-[425px]">
+              <DialogContent>
                 <DialogHeader>
                   <DialogTitle>Add New Family Member</DialogTitle>
                   <DialogDescription>
                     Create a new profile for a family member.
                   </DialogDescription>
                 </DialogHeader>
-                <div className="grid gap-4 py-4">
-                  <div className="grid gap-2">
-                    <Label htmlFor="member-name">Name</Label>
-                    <Input
-                      id="member-name"
-                      placeholder="Enter family member's name"
-                      value={newMember.name}
-                      onChange={(e) =>
-                        setNewMember({ ...newMember, name: e.target.value })
-                      }
-                    />
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    addFamilyMember();
+                  }}
+                >
+                  <div className="grid gap-4 py-4">
+                    <div className="grid gap-2">
+                      <Label htmlFor="member-name">Name</Label>
+                      <Input
+                        id="member-name"
+                        placeholder="Enter family member's name"
+                        value={newMember.name}
+                        onChange={(e) =>
+                          setNewMember({ ...newMember, name: e.target.value })
+                        }
+                        required
+                      />
+                    </div>
+                    <div className="grid gap-2">
+                      <Label htmlFor="member-role">Role</Label>
+                      <Select
+                        value={newMember.role}
+                        onValueChange={(value) =>
+                          setNewMember({ ...newMember, role: value })
+                        }
+                      >
+                        <SelectTrigger id="member-role">
+                          <SelectValue placeholder="Select role" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="Parent">Parent</SelectItem>
+                          <SelectItem value="Child">Child</SelectItem>
+                          <SelectItem value="Grandparent">
+                            Grandparent
+                          </SelectItem>
+                          <SelectItem value="Other">Other</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
                   </div>
-                  <div className="grid gap-2">
-                    <Label htmlFor="member-role">Role</Label>
-                    <Select
-                      value={newMember.role}
-                      onValueChange={(value) =>
-                        setNewMember({ ...newMember, role: value })
-                      }
-                    >
-                      <SelectTrigger id="member-role">
-                        <SelectValue placeholder="Select role" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="Parent">Parent</SelectItem>
-                        <SelectItem value="Child">Child</SelectItem>
-                        <SelectItem value="Grandparent">Grandparent</SelectItem>
-                        <SelectItem value="Other">Other</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </div>
-                <DialogFooter>
-                  <Button type="submit" onClick={addFamilyMember}>
-                    Add Family Member
-                  </Button>
-                </DialogFooter>
+                  <DialogFooter>
+                    <Button type="submit">Add Family Member</Button>
+                  </DialogFooter>
+                </form>
               </DialogContent>
             </Dialog>
           </div>

@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -12,10 +13,21 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
   Home,
   Plus,
   Box,
-  Kitchen,
+  ChefHat,
   Bath,
   Bed,
   Sofa,
@@ -25,12 +37,12 @@ import {
 
 export default function InventoryPage() {
   // Sample inventory categories data
-  const categories = [
+  const [categories, setCategories] = useState([
     {
       id: "1",
       name: "Kitchen",
       items: 25,
-      icon: Kitchen,
+      icon: ChefHat,
       color: "bg-orange-100",
       iconColor: "text-orange-600",
     },
@@ -74,7 +86,40 @@ export default function InventoryPage() {
       color: "bg-indigo-100",
       iconColor: "text-indigo-600",
     },
-  ];
+  ]);
+
+  // State for new category
+  const [newCategory, setNewCategory] = useState({
+    name: "",
+    icon: ChefHat,
+    color: "bg-orange-100",
+    iconColor: "text-orange-600",
+  });
+
+  // Add new category
+  const addCategory = () => {
+    if (newCategory.name.trim() === "") return;
+
+    setCategories([
+      ...categories,
+      {
+        id: (categories.length + 1).toString(),
+        name: newCategory.name,
+        items: 0,
+        icon: newCategory.icon,
+        color: newCategory.color,
+        iconColor: newCategory.iconColor,
+      },
+    ]);
+
+    // Reset form
+    setNewCategory({
+      name: "",
+      icon: ChefHat,
+      color: "bg-orange-100",
+      iconColor: "text-orange-600",
+    });
+  };
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -124,9 +169,48 @@ export default function InventoryPage() {
             <h2 className="text-3xl font-bold tracking-tight">
               Inventory Categories
             </h2>
-            <Button>
-              <Plus className="mr-2 h-4 w-4" /> Add Category
-            </Button>
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button>
+                  <Plus className="mr-2 h-4 w-4" /> Add Category
+                </Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Add New Category</DialogTitle>
+                  <DialogDescription>
+                    Create a new inventory category.
+                  </DialogDescription>
+                </DialogHeader>
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    addCategory();
+                  }}
+                >
+                  <div className="grid gap-4 py-4">
+                    <div className="grid gap-2">
+                      <Label htmlFor="category-name">Name</Label>
+                      <Input
+                        id="category-name"
+                        placeholder="Enter category name"
+                        value={newCategory.name}
+                        onChange={(e) =>
+                          setNewCategory({
+                            ...newCategory,
+                            name: e.target.value,
+                          })
+                        }
+                        required
+                      />
+                    </div>
+                  </div>
+                  <DialogFooter>
+                    <Button type="submit">Add Category</Button>
+                  </DialogFooter>
+                </form>
+              </DialogContent>
+            </Dialog>
           </div>
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {categories.map((category) => {
