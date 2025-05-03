@@ -6,6 +6,24 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { CheckSquare, Home, Plus, User } from "lucide-react";
 
 interface Task {
@@ -88,6 +106,16 @@ export default function TasksPage() {
     },
   ]);
 
+  // State for new task
+  const [newTask, setNewTask] = useState<Omit<Task, "id" | "status">>({
+    title: "",
+    assignedTo: "John Smith",
+    dueDate: "",
+    recurring: "weekly",
+    category: "Household",
+    room: "Kitchen",
+  });
+
   const [filter, setFilter] = useState("all");
   const [assigneeFilter, setAssigneeFilter] = useState("all");
 
@@ -102,6 +130,30 @@ export default function TasksPage() {
           : task
       )
     );
+  };
+
+  // Add new task
+  const addTask = () => {
+    if (newTask.title.trim() === "") return;
+
+    setTasks([
+      ...tasks,
+      {
+        id: tasks.length + 1,
+        ...newTask,
+        status: "pending",
+      },
+    ]);
+
+    // Reset form
+    setNewTask({
+      title: "",
+      assignedTo: "John Smith",
+      dueDate: "",
+      recurring: "weekly",
+      category: "Household",
+      room: "Kitchen",
+    });
   };
 
   const filteredTasks = tasks.filter((task) => {
@@ -178,9 +230,145 @@ export default function TasksPage() {
             <h2 className="text-3xl font-bold tracking-tight">
               Tasks & Chores
             </h2>
-            <Button>
-              <Plus className="mr-2 h-4 w-4" /> Add Task
-            </Button>
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button>
+                  <Plus className="mr-2 h-4 w-4" /> Add Task
+                </Button>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Add New Task</DialogTitle>
+                  <DialogDescription>
+                    Create a new task for the family.
+                  </DialogDescription>
+                </DialogHeader>
+                <form
+                  onSubmit={(e) => {
+                    e.preventDefault();
+                    addTask();
+                  }}
+                >
+                  <div className="grid gap-4 py-4">
+                    <div className="grid gap-2">
+                      <Label htmlFor="task-title">Task Title</Label>
+                      <Input
+                        id="task-title"
+                        placeholder="Enter task title"
+                        value={newTask.title}
+                        onChange={(e) =>
+                          setNewTask({ ...newTask, title: e.target.value })
+                        }
+                        required
+                      />
+                    </div>
+                    <div className="grid gap-2">
+                      <Label htmlFor="task-assignee">Assigned To</Label>
+                      <Select
+                        value={newTask.assignedTo}
+                        onValueChange={(value) =>
+                          setNewTask({ ...newTask, assignedTo: value })
+                        }
+                      >
+                        <SelectTrigger id="task-assignee">
+                          <SelectValue placeholder="Select family member" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="John Smith">John Smith</SelectItem>
+                          <SelectItem value="Sarah Smith">
+                            Sarah Smith
+                          </SelectItem>
+                          <SelectItem value="Emma Smith">Emma Smith</SelectItem>
+                          <SelectItem value="Michael Smith">
+                            Michael Smith
+                          </SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="grid gap-2">
+                      <Label htmlFor="task-due-date">Due Date</Label>
+                      <Input
+                        id="task-due-date"
+                        type="date"
+                        value={newTask.dueDate}
+                        onChange={(e) =>
+                          setNewTask({ ...newTask, dueDate: e.target.value })
+                        }
+                        required
+                      />
+                    </div>
+                    <div className="grid gap-2">
+                      <Label htmlFor="task-recurring">Recurring</Label>
+                      <Select
+                        value={newTask.recurring}
+                        onValueChange={(value) =>
+                          setNewTask({ ...newTask, recurring: value })
+                        }
+                      >
+                        <SelectTrigger id="task-recurring">
+                          <SelectValue placeholder="Select frequency" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="daily">Daily</SelectItem>
+                          <SelectItem value="weekly">Weekly</SelectItem>
+                          <SelectItem value="biweekly">Bi-weekly</SelectItem>
+                          <SelectItem value="monthly">Monthly</SelectItem>
+                          <SelectItem value="none">None</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="grid gap-2">
+                      <Label htmlFor="task-category">Category</Label>
+                      <Select
+                        value={newTask.category}
+                        onValueChange={(value) =>
+                          setNewTask({ ...newTask, category: value })
+                        }
+                      >
+                        <SelectTrigger id="task-category">
+                          <SelectValue placeholder="Select category" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="Household">Household</SelectItem>
+                          <SelectItem value="Kitchen">Kitchen</SelectItem>
+                          <SelectItem value="Cleaning">Cleaning</SelectItem>
+                          <SelectItem value="Yard">Yard</SelectItem>
+                          <SelectItem value="Other">Other</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                    <div className="grid gap-2">
+                      <Label htmlFor="task-room">Room</Label>
+                      <Select
+                        value={newTask.room}
+                        onValueChange={(value) =>
+                          setNewTask({ ...newTask, room: value })
+                        }
+                      >
+                        <SelectTrigger id="task-room">
+                          <SelectValue placeholder="Select room" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="Kitchen">Kitchen</SelectItem>
+                          <SelectItem value="Living Room">
+                            Living Room
+                          </SelectItem>
+                          <SelectItem value="Bathroom">Bathroom</SelectItem>
+                          <SelectItem value="Bedroom">Bedroom</SelectItem>
+                          <SelectItem value="Laundry Room">
+                            Laundry Room
+                          </SelectItem>
+                          <SelectItem value="Outdoor">Outdoor</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </div>
+                  <DialogFooter>
+                    <Button type="submit">Add Task</Button>
+                  </DialogFooter>
+                </form>
+              </DialogContent>
+            </Dialog>
           </div>
 
           <div className="flex flex-col gap-4 mb-6">
