@@ -7,7 +7,14 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { CalendarDays, CheckSquare, Home, Package, Users } from "lucide-react";
+import {
+  CalendarDays,
+  CheckSquare,
+  Home,
+  Package,
+  Users,
+  Sparkles,
+} from "lucide-react";
 
 export default function Dashboard() {
   return (
@@ -48,6 +55,12 @@ export default function Dashboard() {
               className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
             >
               Calendar
+            </Link>
+            <Link
+              href="/cleaning-routine"
+              className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
+            >
+              Routine
             </Link>
           </nav>
           <div className="flex items-center gap-2">
@@ -148,6 +161,27 @@ export default function Dashboard() {
                   <Link href="/calendar" className="w-full">
                     <Button className="w-full" variant="outline">
                       View Calendar
+                    </Button>
+                  </Link>
+                </CardFooter>
+              </Card>
+              <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                  <CardTitle className="text-sm font-medium">
+                    Cleaning Routine
+                  </CardTitle>
+                  <Sparkles className="h-4 w-4 text-muted-foreground" />
+                </CardHeader>
+                <CardContent>
+                  <div className="text-2xl font-bold">7 Days</div>
+                  <p className="text-xs text-muted-foreground">
+                    Weekly cleaning schedule
+                  </p>
+                </CardContent>
+                <CardFooter>
+                  <Link href="/cleaning-routine" className="w-full">
+                    <Button className="w-full" variant="outline">
+                      View Schedule
                     </Button>
                   </Link>
                 </CardFooter>

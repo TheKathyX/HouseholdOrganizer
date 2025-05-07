@@ -1,11 +1,18 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import Link from "next/link"
-import Image from "next/image"
-import { useParams } from "next/navigation"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
+import { useState } from "react";
+import Link from "next/link";
+import Image from "next/image";
+import { useParams } from "next/navigation";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import {
   Dialog,
   DialogContent,
@@ -14,16 +21,24 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Separator } from "@/components/ui/separator"
-import { Textarea } from "@/components/ui/textarea"
-import { ArrowLeft, Edit, ExternalLink, Gift, Home, Plus, Trash2 } from "lucide-react"
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Separator } from "@/components/ui/separator";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  ArrowLeft,
+  Edit,
+  ExternalLink,
+  Gift,
+  Home,
+  Plus,
+  Trash2,
+} from "lucide-react";
 
 export default function ProfilePage() {
-  const params = useParams()
-  const profileId = params.id
+  const params = useParams();
+  const profileId = params.id;
 
   // Sample family members data - in a real app, you would fetch this based on the ID
   const familyMembers = [
@@ -83,10 +98,11 @@ export default function ProfilePage() {
       tasksCompleted: 6,
       avatar: "/placeholder.svg?height=200&width=200",
     },
-  ]
+  ];
 
   // Find the current profile
-  const profile = familyMembers.find((member) => member.id === profileId) || familyMembers[0]
+  const profile =
+    familyMembers.find((member) => member.id === profileId) || familyMembers[0];
 
   // Sample wishlist data
   const [wishlist, setWishlist] = useState([
@@ -111,7 +127,7 @@ export default function ProfilePage() {
       link: "https://example.com/cookbook",
       priority: "Low",
     },
-  ])
+  ]);
 
   // State for new wishlist item
   const [newItem, setNewItem] = useState({
@@ -119,11 +135,11 @@ export default function ProfilePage() {
     description: "",
     link: "",
     priority: "Medium",
-  })
+  });
 
   // Add new wishlist item
   const addWishlistItem = () => {
-    if (newItem.title.trim() === "") return
+    if (newItem.title.trim() === "") return;
 
     setWishlist([
       ...wishlist,
@@ -131,7 +147,7 @@ export default function ProfilePage() {
         id: wishlist.length + 1,
         ...newItem,
       },
-    ])
+    ]);
 
     // Reset form
     setNewItem({
@@ -139,13 +155,13 @@ export default function ProfilePage() {
       description: "",
       link: "",
       priority: "Medium",
-    })
-  }
+    });
+  };
 
   // Remove wishlist item
   const removeWishlistItem = (id) => {
-    setWishlist(wishlist.filter((item) => item.id !== id))
-  }
+    setWishlist(wishlist.filter((item) => item.id !== id));
+  };
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -156,10 +172,16 @@ export default function ProfilePage() {
             <h1 className="text-xl font-bold">HomeHub</h1>
           </div>
           <nav className="hidden md:flex gap-6">
-            <Link href="/" className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary">
+            <Link
+              href="/"
+              className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
+            >
               Dashboard
             </Link>
-            <Link href="/profiles" className="text-sm font-medium transition-colors hover:text-primary">
+            <Link
+              href="/profiles"
+              className="text-sm font-medium transition-colors hover:text-primary"
+            >
               Profiles
             </Link>
             <Link
@@ -180,6 +202,12 @@ export default function ProfilePage() {
             >
               Calendar
             </Link>
+            <Link
+              href="/cleaning-routine"
+              className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
+            >
+              Routine
+            </Link>
           </nav>
         </div>
       </header>
@@ -191,7 +219,9 @@ export default function ProfilePage() {
                 <ArrowLeft className="h-4 w-4" />
               </Button>
             </Link>
-            <h2 className="text-3xl font-bold tracking-tight">{profile.name}'s Profile</h2>
+            <h2 className="text-3xl font-bold tracking-tight">
+              {profile.name}'s Profile
+            </h2>
           </div>
 
           <div className="grid gap-6 md:grid-cols-[300px_1fr]">
@@ -205,7 +235,11 @@ export default function ProfilePage() {
                       fill
                       className="rounded-full object-cover border-4 border-background"
                     />
-                    <Button size="icon" variant="outline" className="absolute bottom-0 right-0 rounded-full">
+                    <Button
+                      size="icon"
+                      variant="outline"
+                      className="absolute bottom-0 right-0 rounded-full"
+                    >
                       <Edit className="h-4 w-4" />
                     </Button>
                   </div>
@@ -220,7 +254,9 @@ export default function ProfilePage() {
               <Card>
                 <CardHeader>
                   <CardTitle>Personal Information</CardTitle>
-                  <CardDescription>Details about {profile.name}</CardDescription>
+                  <CardDescription>
+                    Details about {profile.name}
+                  </CardDescription>
                 </CardHeader>
                 <CardContent>
                   <div className="space-y-4">
@@ -231,7 +267,9 @@ export default function ProfilePage() {
                     <Separator />
                     <div className="grid grid-cols-2 gap-1">
                       <div className="text-sm font-medium">Birthday:</div>
-                      <div className="text-sm">{new Date(profile.birthday).toLocaleDateString()}</div>
+                      <div className="text-sm">
+                        {new Date(profile.birthday).toLocaleDateString()}
+                      </div>
                     </div>
                     <Separator />
                     <div className="grid grid-cols-2 gap-1">
@@ -281,7 +319,9 @@ export default function ProfilePage() {
                       <Gift className="h-5 w-5" />
                       Wishlist
                     </CardTitle>
-                    <CardDescription>Items {profile.name} would like to receive</CardDescription>
+                    <CardDescription>
+                      Items {profile.name} would like to receive
+                    </CardDescription>
                   </div>
                   <Dialog>
                     <DialogTrigger asChild>
@@ -293,7 +333,9 @@ export default function ProfilePage() {
                     <DialogContent>
                       <DialogHeader>
                         <DialogTitle>Add Wishlist Item</DialogTitle>
-                        <DialogDescription>Add an item to {profile.name}'s wishlist</DialogDescription>
+                        <DialogDescription>
+                          Add an item to {profile.name}'s wishlist
+                        </DialogDescription>
                       </DialogHeader>
                       <div className="grid gap-4 py-4">
                         <div className="grid gap-2">
@@ -302,7 +344,9 @@ export default function ProfilePage() {
                             id="item-title"
                             placeholder="Enter item name"
                             value={newItem.title}
-                            onChange={(e) => setNewItem({ ...newItem, title: e.target.value })}
+                            onChange={(e) =>
+                              setNewItem({ ...newItem, title: e.target.value })
+                            }
                           />
                         </div>
                         <div className="grid gap-2">
@@ -311,7 +355,12 @@ export default function ProfilePage() {
                             id="item-description"
                             placeholder="Enter item description"
                             value={newItem.description}
-                            onChange={(e) => setNewItem({ ...newItem, description: e.target.value })}
+                            onChange={(e) =>
+                              setNewItem({
+                                ...newItem,
+                                description: e.target.value,
+                              })
+                            }
                           />
                         </div>
                         <div className="grid gap-2">
@@ -320,7 +369,9 @@ export default function ProfilePage() {
                             id="item-link"
                             placeholder="https://example.com/item"
                             value={newItem.link}
-                            onChange={(e) => setNewItem({ ...newItem, link: e.target.value })}
+                            onChange={(e) =>
+                              setNewItem({ ...newItem, link: e.target.value })
+                            }
                           />
                         </div>
                         <div className="grid gap-2">
@@ -329,7 +380,12 @@ export default function ProfilePage() {
                             id="item-priority"
                             className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                             value={newItem.priority}
-                            onChange={(e) => setNewItem({ ...newItem, priority: e.target.value })}
+                            onChange={(e) =>
+                              setNewItem({
+                                ...newItem,
+                                priority: e.target.value,
+                              })
+                            }
                           >
                             <option value="Low">Low</option>
                             <option value="Medium">Medium</option>
@@ -349,10 +405,15 @@ export default function ProfilePage() {
                   {wishlist.length > 0 ? (
                     <div className="space-y-4">
                       {wishlist.map((item) => (
-                        <div key={item.id} className="flex items-start justify-between border rounded-lg p-4">
+                        <div
+                          key={item.id}
+                          className="flex items-start justify-between border rounded-lg p-4"
+                        >
                           <div>
                             <h4 className="font-medium">{item.title}</h4>
-                            <p className="text-sm text-muted-foreground">{item.description}</p>
+                            <p className="text-sm text-muted-foreground">
+                              {item.description}
+                            </p>
                             {item.link && (
                               <a
                                 href={item.link}
@@ -371,13 +432,17 @@ export default function ProfilePage() {
                                 item.priority === "High"
                                   ? "bg-red-100 text-red-800"
                                   : item.priority === "Medium"
-                                    ? "bg-yellow-100 text-yellow-800"
-                                    : "bg-green-100 text-green-800"
+                                  ? "bg-yellow-100 text-yellow-800"
+                                  : "bg-green-100 text-green-800"
                               }`}
                             >
                               {item.priority}
                             </span>
-                            <Button variant="ghost" size="icon" onClick={() => removeWishlistItem(item.id)}>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              onClick={() => removeWishlistItem(item.id)}
+                            >
                               <Trash2 className="h-4 w-4 text-muted-foreground" />
                             </Button>
                           </div>
@@ -387,8 +452,12 @@ export default function ProfilePage() {
                   ) : (
                     <div className="text-center py-12">
                       <Gift className="mx-auto h-12 w-12 text-muted-foreground" />
-                      <h3 className="mt-4 text-lg font-medium">No items in wishlist</h3>
-                      <p className="text-muted-foreground">Add items that {profile.name} would like to receive</p>
+                      <h3 className="mt-4 text-lg font-medium">
+                        No items in wishlist
+                      </h3>
+                      <p className="text-muted-foreground">
+                        Add items that {profile.name} would like to receive
+                      </p>
                     </div>
                   )}
                 </CardContent>
@@ -405,6 +474,5 @@ export default function ProfilePage() {
         </div>
       </footer>
     </div>
-  )
+  );
 }
-

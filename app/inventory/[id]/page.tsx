@@ -38,6 +38,7 @@ interface Item {
   location: string;
   notes: string;
   lastUpdated: string;
+  expirationDate?: string;
 }
 
 export default function CategoryPage({ params }: { params: { id: string } }) {
@@ -50,6 +51,7 @@ export default function CategoryPage({ params }: { params: { id: string } }) {
       location: "Cabinet A",
       notes: "Good condition",
       lastUpdated: "2024-03-20",
+      expirationDate: "2024-12-31",
     },
     {
       id: "2",
@@ -58,6 +60,7 @@ export default function CategoryPage({ params }: { params: { id: string } }) {
       location: "Shelf B",
       notes: "Needs replacement",
       lastUpdated: "2024-03-19",
+      expirationDate: "2024-06-30",
     },
   ]);
 
@@ -67,6 +70,7 @@ export default function CategoryPage({ params }: { params: { id: string } }) {
     quantity: 1,
     location: "",
     notes: "",
+    expirationDate: "",
   });
 
   // Add new item
@@ -88,6 +92,7 @@ export default function CategoryPage({ params }: { params: { id: string } }) {
       quantity: 1,
       location: "",
       notes: "",
+      expirationDate: "",
     });
   };
 
@@ -129,6 +134,12 @@ export default function CategoryPage({ params }: { params: { id: string } }) {
               className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
             >
               Calendar
+            </Link>
+            <Link
+              href="/cleaning-routine"
+              className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
+            >
+              Routine
             </Link>
           </nav>
         </div>
@@ -223,6 +234,20 @@ export default function CategoryPage({ params }: { params: { id: string } }) {
                         }
                       />
                     </div>
+                    <div className="grid gap-2">
+                      <Label htmlFor="item-expiration">Expiration Date</Label>
+                      <Input
+                        id="item-expiration"
+                        type="date"
+                        value={newItem.expirationDate}
+                        onChange={(e) =>
+                          setNewItem({
+                            ...newItem,
+                            expirationDate: e.target.value,
+                          })
+                        }
+                      />
+                    </div>
                   </div>
                   <DialogFooter>
                     <Button type="submit">Add Item</Button>
@@ -248,6 +273,12 @@ export default function CategoryPage({ params }: { params: { id: string } }) {
                     {item.notes && (
                       <p className="text-sm">
                         <span className="font-medium">Notes:</span> {item.notes}
+                      </p>
+                    )}
+                    {item.expirationDate && (
+                      <p className="text-sm">
+                        <span className="font-medium">Expires:</span>{" "}
+                        {item.expirationDate}
                       </p>
                     )}
                     <p className="text-sm text-muted-foreground">

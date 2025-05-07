@@ -160,6 +160,12 @@ export default function InventoryPage() {
             >
               Calendar
             </Link>
+            <Link
+              href="/cleaning-routine"
+              className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
+            >
+              Routine
+            </Link>
           </nav>
         </div>
       </header>
