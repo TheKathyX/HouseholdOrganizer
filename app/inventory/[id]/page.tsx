@@ -30,6 +30,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Home, Plus, ArrowLeft } from "lucide-react";
+import Image from "next/image";
 
 interface Item {
   id: string;
@@ -39,6 +40,7 @@ interface Item {
   notes: string;
   lastUpdated: string;
   expirationDate?: string;
+  instructionManuals?: string[]; // Array of photo URLs
 }
 
 export default function CategoryPage({ params }: { params: { id: string } }) {
@@ -46,21 +48,24 @@ export default function CategoryPage({ params }: { params: { id: string } }) {
   const [items, setItems] = useState<Item[]>([
     {
       id: "1",
-      name: "Sample Item 1",
-      quantity: 2,
-      location: "Cabinet A",
-      notes: "Good condition",
+      name: "Smart TV",
+      quantity: 1,
+      location: "Living Room",
+      notes: "55-inch 4K",
       lastUpdated: "2024-03-20",
-      expirationDate: "2024-12-31",
+      instructionManuals: [
+        "/manuals/tv-manual-1.jpg",
+        "/manuals/tv-manual-2.jpg",
+      ],
     },
     {
       id: "2",
-      name: "Sample Item 2",
+      name: "Washing Machine",
       quantity: 1,
-      location: "Shelf B",
-      notes: "Needs replacement",
+      location: "Laundry Room",
+      notes: "Front loading",
       lastUpdated: "2024-03-19",
-      expirationDate: "2024-06-30",
+      instructionManuals: ["/manuals/washer-manual.jpg"],
     },
   ]);
 
@@ -71,7 +76,24 @@ export default function CategoryPage({ params }: { params: { id: string } }) {
     location: "",
     notes: "",
     expirationDate: "",
+    instructionManuals: [],
   });
+
+  // Handle file upload
+  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+    if (!files) return;
+
+    // In a real app, you would upload these files to a server
+    // For now, we'll just create URLs for the files
+    const newManuals = Array.from(files).map((file) =>
+      URL.createObjectURL(file)
+    );
+    setNewItem((prev) => ({
+      ...prev,
+      instructionManuals: [...(prev.instructionManuals || []), ...newManuals],
+    }));
+  };
 
   // Add new item
   const addItem = () => {
@@ -93,6 +115,7 @@ export default function CategoryPage({ params }: { params: { id: string } }) {
       location: "",
       notes: "",
       expirationDate: "",
+      instructionManuals: [],
     });
   };
 
@@ -248,6 +271,35 @@ export default function CategoryPage({ params }: { params: { id: string } }) {
                         }
                       />
                     </div>
+                    {params.id === "5" && ( // Electronics category
+                      <div className="grid gap-2">
+                        <Label htmlFor="item-manuals">
+                          Instruction Manuals
+                        </Label>
+                        <Input
+                          id="item-manuals"
+                          type="file"
+                          accept="image/*"
+                          multiple
+                          onChange={handleFileUpload}
+                        />
+                        {newItem.instructionManuals &&
+                          newItem.instructionManuals.length > 0 && (
+                            <div className="flex gap-2 mt-2">
+                              {newItem.instructionManuals.map((url, index) => (
+                                <div key={index} className="relative w-20 h-20">
+                                  <Image
+                                    src={url}
+                                    alt={`Manual ${index + 1}`}
+                                    fill
+                                    className="object-cover rounded-md"
+                                  />
+                                </div>
+                              ))}
+                            </div>
+                          )}
+                      </div>
+                    )}
                   </div>
                   <DialogFooter>
                     <Button type="submit">Add Item</Button>
@@ -281,6 +333,41 @@ export default function CategoryPage({ params }: { params: { id: string } }) {
                         {item.expirationDate}
                       </p>
                     )}
+                    {params.id === "5" &&
+                      item.instructionManuals &&
+                      item.instructionManuals.length > 0 && (
+                        <div className="mt-4">
+                          <p className="text-sm font-medium mb-2">
+                            Instruction Manuals:
+                          </p>
+                          <div className="flex gap-2">
+                            {item.instructionManuals.map((url, index) => (
+                              <Dialog key={index}>
+                                <DialogTrigger asChild>
+                                  <Button variant="outline" size="sm">
+                                    Manual {index + 1}
+                                  </Button>
+                                </DialogTrigger>
+                                <DialogContent className="max-w-4xl">
+                                  <DialogHeader>
+                                    <DialogTitle>
+                                      Instruction Manual
+                                    </DialogTitle>
+                                  </DialogHeader>
+                                  <div className="relative w-full h-[80vh]">
+                                    <Image
+                                      src={url}
+                                      alt={`Manual ${index + 1}`}
+                                      fill
+                                      className="object-contain"
+                                    />
+                                  </div>
+                                </DialogContent>
+                              </Dialog>
+                            ))}
+                          </div>
+                        </div>
+                      )}
                     <p className="text-sm text-muted-foreground">
                       Last updated: {item.lastUpdated}
                     </p>
