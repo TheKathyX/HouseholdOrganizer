@@ -221,7 +221,22 @@ export default function CalendarPage() {
                   mode="single"
                   selected={date}
                   onSelect={(newDate) => newDate && setDate(newDate)}
-                  className="rounded-md border w-full h-full p-8 [&_.rdp-caption]:text-2xl [&_.rdp-cell]:text-xl [&_.rdp-head_th]:text-xl [&_.rdp-button]:w-20 [&_.rdp-button]:h-20 [&_.rdp-nav]:h-20 [&_.rdp-nav_button]:w-20 [&_.rdp-nav_button]:h-20 [&_.rdp]:h-full [&_.rdp-months]:h-full [&_.rdp-month]:h-full [&_.rdp-table]:h-full [&_.rdp-table]:w-full"
+                  className="rounded-md border w-full h-full p-8 
+                    [&_.rdp]:scale-125
+                    [&_.rdp]:origin-top-left
+                    [&_.rdp-caption]:text-2xl 
+                    [&_.rdp-cell]:text-xl 
+                    [&_.rdp-head_th]:text-xl 
+                    [&_.rdp-button]:w-16 
+                    [&_.rdp-button]:h-16 
+                    [&_.rdp-nav]:h-16 
+                    [&_.rdp-nav_button]:w-16 
+                    [&_.rdp-nav_button]:h-16 
+                    [&_.rdp]:h-full 
+                    [&_.rdp-months]:h-full 
+                    [&_.rdp-month]:h-full 
+                    [&_.rdp-table]:h-full 
+                    [&_.rdp-table]:w-full"
                 />
               </CardContent>
             </Card>

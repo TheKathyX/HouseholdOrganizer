@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, use } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
@@ -43,81 +43,319 @@ interface Item {
   instructionManuals?: string[]; // Array of photo URLs
 }
 
-export default function CategoryPage({ params }: { params: { id: string } }) {
-  // Sample items data - in a real app, this would come from an API
-  const [items, setItems] = useState<Item[]>([
-    {
-      id: "1",
-      name: "Smart TV",
-      quantity: 1,
-      location: "Living Room",
-      notes: "55-inch 4K",
-      lastUpdated: "2024-03-20",
-      instructionManuals: [
-        "/manuals/tv-manual-1.jpg",
-        "/manuals/tv-manual-2.jpg",
-      ],
-    },
-    {
-      id: "2",
-      name: "Washing Machine",
-      quantity: 1,
-      location: "Laundry Room",
-      notes: "Front loading",
-      lastUpdated: "2024-03-19",
-      instructionManuals: ["/manuals/washer-manual.jpg"],
-    },
-  ]);
+export default function CategoryPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  // Unwrap params using React.use()
+  const { id } = use(params);
 
-  // State for new item
-  const [newItem, setNewItem] = useState<Omit<Item, "id" | "lastUpdated">>({
+  // Validate category ID
+  const isValidCategoryId = (id: string) => {
+    const validIds = ["1", "2", "3", "4", "5", "6"];
+    return validIds.includes(id);
+  };
+
+  // Function to get category-specific items
+  const getCategoryItems = (categoryId: string) => {
+    if (!isValidCategoryId(categoryId)) {
+      console.error("Invalid category ID:", categoryId);
+      return [];
+    }
+
+    switch (categoryId) {
+      case "1": // Kitchen
+        return [
+          {
+            id: "1",
+            name: "Stainless Steel Pots Set",
+            quantity: 1,
+            location: "Kitchen Cabinet",
+            notes: "5-piece set",
+            lastUpdated: "2024-03-20",
+          },
+          {
+            id: "2",
+            name: "Cutting Board Set",
+            quantity: 1,
+            location: "Kitchen Drawer",
+            notes: "Bamboo, 3 sizes",
+            lastUpdated: "2024-03-19",
+          },
+          {
+            id: "3",
+            name: "Kitchen Knife Set",
+            quantity: 1,
+            location: "Knife Block",
+            notes: "8-piece set",
+            lastUpdated: "2024-03-18",
+          },
+        ];
+      case "2": // Bathroom
+        return [
+          {
+            id: "1",
+            name: "Bath Towel Set",
+            quantity: 4,
+            location: "Bathroom Cabinet",
+            notes: "Cotton, 4 pieces",
+            lastUpdated: "2024-03-20",
+          },
+          {
+            id: "2",
+            name: "Shower Curtain",
+            quantity: 1,
+            location: "Bathroom Closet",
+            notes: "Waterproof",
+            lastUpdated: "2024-03-19",
+          },
+          {
+            id: "3",
+            name: "Bath Mat",
+            quantity: 2,
+            location: "Bathroom Floor",
+            notes: "Memory foam",
+            lastUpdated: "2024-03-18",
+          },
+        ];
+      case "3": // Bedroom
+        return [
+          {
+            id: "1",
+            name: "Bed Sheets Set",
+            quantity: 2,
+            location: "Bedroom Closet",
+            notes: "Queen size, cotton",
+            lastUpdated: "2024-03-20",
+          },
+          {
+            id: "2",
+            name: "Pillows",
+            quantity: 4,
+            location: "Bed",
+            notes: "Memory foam",
+            lastUpdated: "2024-03-19",
+          },
+          {
+            id: "3",
+            name: "Comforter",
+            quantity: 1,
+            location: "Bedroom Closet",
+            notes: "Down alternative",
+            lastUpdated: "2024-03-18",
+          },
+        ];
+      case "4": // Living Room
+        return [
+          {
+            id: "1",
+            name: "Throw Pillows",
+            quantity: 4,
+            location: "Sofa",
+            notes: "Decorative",
+            lastUpdated: "2024-03-20",
+          },
+          {
+            id: "2",
+            name: "Area Rug",
+            quantity: 1,
+            location: "Living Room Floor",
+            notes: "5x7 feet",
+            lastUpdated: "2024-03-19",
+          },
+          {
+            id: "3",
+            name: "Blanket",
+            quantity: 2,
+            location: "Living Room Cabinet",
+            notes: "Fleece",
+            lastUpdated: "2024-03-18",
+          },
+        ];
+      case "5": // Electronics
+        return [
+          {
+            id: "1",
+            name: "Smart TV",
+            quantity: 1,
+            location: "Living Room",
+            notes: "55-inch 4K",
+            lastUpdated: "2024-03-20",
+            instructionManuals: [
+              "/manuals/tv-manual-1.jpg",
+              "/manuals/tv-manual-2.jpg",
+            ],
+          },
+          {
+            id: "2",
+            name: "Washing Machine",
+            quantity: 1,
+            location: "Laundry Room",
+            notes: "Front loading",
+            lastUpdated: "2024-03-19",
+            instructionManuals: ["/manuals/washer-manual.jpg"],
+          },
+          {
+            id: "3",
+            name: "Blender",
+            quantity: 1,
+            location: "Kitchen Counter",
+            notes: "High-speed blender",
+            lastUpdated: "2024-03-18",
+            instructionManuals: ["/manuals/blender-manual.jpg"],
+          },
+          {
+            id: "4",
+            name: "Coffee Maker",
+            quantity: 1,
+            location: "Kitchen Cabinet",
+            notes: "Programmable",
+            lastUpdated: "2024-03-17",
+            instructionManuals: ["/manuals/coffee-maker-manual.jpg"],
+          },
+          {
+            id: "5",
+            name: "Toaster",
+            quantity: 1,
+            location: "Kitchen Counter",
+            notes: "4-slice toaster",
+            lastUpdated: "2024-03-16",
+            instructionManuals: ["/manuals/toaster-manual.jpg"],
+          },
+          {
+            id: "6",
+            name: "Air Fryer",
+            quantity: 1,
+            location: "Kitchen Cabinet",
+            notes: "Digital display",
+            lastUpdated: "2024-03-15",
+            instructionManuals: ["/manuals/air-fryer-manual.jpg"],
+          },
+        ];
+      case "6": // Laundry
+        return [
+          {
+            id: "1",
+            name: "Laundry Basket",
+            quantity: 2,
+            location: "Laundry Room",
+            notes: "Plastic, collapsible",
+            lastUpdated: "2024-03-20",
+          },
+          {
+            id: "2",
+            name: "Drying Rack",
+            quantity: 1,
+            location: "Laundry Room",
+            notes: "Foldable",
+            lastUpdated: "2024-03-19",
+          },
+          {
+            id: "3",
+            name: "Ironing Board",
+            quantity: 1,
+            location: "Laundry Room Closet",
+            notes: "Adjustable height",
+            lastUpdated: "2024-03-18",
+          },
+        ];
+      default:
+        return [];
+    }
+  };
+
+  // Initialize items based on category with proper validation
+  const [items, setItems] = useState<Item[]>(() => {
+    if (!isValidCategoryId(id)) {
+      console.error("Invalid category ID in params:", id);
+      return [];
+    }
+    return getCategoryItems(id);
+  });
+
+  // State for new item with proper initialization
+  const [newItem, setNewItem] = useState<Partial<Item>>({
     name: "",
     quantity: 1,
     location: "",
     notes: "",
-    expirationDate: "",
-    instructionManuals: [],
   });
 
-  // Handle file upload
+  // State for instruction manual photos
+  const [instructionManuals, setInstructionManuals] = useState<string[]>([]);
+
+  // Handle file upload with error handling
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = e.target.files;
-    if (!files) return;
-
-    // In a real app, you would upload these files to a server
-    // For now, we'll just create URLs for the files
-    const newManuals = Array.from(files).map((file) =>
-      URL.createObjectURL(file)
-    );
-    setNewItem((prev) => ({
-      ...prev,
-      instructionManuals: [...(prev.instructionManuals || []), ...newManuals],
-    }));
+    try {
+      const files = e.target.files;
+      if (files) {
+        const newManuals = Array.from(files).map((file) =>
+          URL.createObjectURL(file)
+        );
+        setInstructionManuals((prev) => [...prev, ...newManuals]);
+      }
+    } catch (error) {
+      console.error("Error handling file upload:", error);
+    }
   };
 
-  // Add new item
+  // Add new item with validation
   const addItem = () => {
-    if (newItem.name.trim() === "") return;
+    try {
+      if (!newItem.name?.trim() || !newItem.location?.trim()) {
+        return;
+      }
 
-    setItems([
-      ...items,
-      {
+      const item: Item = {
         id: (items.length + 1).toString(),
-        ...newItem,
+        name: newItem.name.trim(),
+        quantity: newItem.quantity || 1,
+        location: newItem.location.trim(),
+        notes: newItem.notes?.trim() || "",
         lastUpdated: new Date().toISOString().split("T")[0],
-      },
-    ]);
+        instructionManuals:
+          isValidCategoryId(id) && id === "5" ? instructionManuals : undefined,
+      };
 
-    // Reset form
-    setNewItem({
-      name: "",
-      quantity: 1,
-      location: "",
-      notes: "",
-      expirationDate: "",
-      instructionManuals: [],
-    });
+      setItems((prev) => [...prev, item]);
+      setNewItem({
+        name: "",
+        quantity: 1,
+        location: "",
+        notes: "",
+      });
+      setInstructionManuals([]);
+    } catch (error) {
+      console.error("Error adding item:", error);
+    }
   };
+
+  // Cleanup function for file URLs
+  useEffect(() => {
+    return () => {
+      instructionManuals.forEach((url) => {
+        if (url.startsWith("blob:")) {
+          URL.revokeObjectURL(url);
+        }
+      });
+    };
+  }, [instructionManuals]);
+
+  // Show error state if category ID is invalid
+  if (!isValidCategoryId(id)) {
+    return (
+      <div className="flex min-h-screen flex-col items-center justify-center">
+        <h1 className="text-2xl font-bold text-red-600">Invalid Category</h1>
+        <p className="text-muted-foreground mt-2">
+          The requested category does not exist.
+        </p>
+        <Link href="/inventory" className="mt-4">
+          <Button variant="outline">Return to Categories</Button>
+        </Link>
+      </div>
+    );
+  }
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -271,7 +509,7 @@ export default function CategoryPage({ params }: { params: { id: string } }) {
                         }
                       />
                     </div>
-                    {params.id === "5" && ( // Electronics category
+                    {id === "5" && ( // Electronics category
                       <div className="grid gap-2">
                         <Label htmlFor="item-manuals">
                           Instruction Manuals
@@ -283,21 +521,20 @@ export default function CategoryPage({ params }: { params: { id: string } }) {
                           multiple
                           onChange={handleFileUpload}
                         />
-                        {newItem.instructionManuals &&
-                          newItem.instructionManuals.length > 0 && (
-                            <div className="flex gap-2 mt-2">
-                              {newItem.instructionManuals.map((url, index) => (
-                                <div key={index} className="relative w-20 h-20">
-                                  <Image
-                                    src={url}
-                                    alt={`Manual ${index + 1}`}
-                                    fill
-                                    className="object-cover rounded-md"
-                                  />
-                                </div>
-                              ))}
-                            </div>
-                          )}
+                        {instructionManuals.length > 0 && (
+                          <div className="flex gap-2 mt-2">
+                            {instructionManuals.map((url, index) => (
+                              <div key={index} className="relative w-20 h-20">
+                                <Image
+                                  src={url}
+                                  alt={`Manual ${index + 1}`}
+                                  fill
+                                  className="object-cover rounded-md"
+                                />
+                              </div>
+                            ))}
+                          </div>
+                        )}
                       </div>
                     )}
                   </div>
@@ -333,7 +570,7 @@ export default function CategoryPage({ params }: { params: { id: string } }) {
                         {item.expirationDate}
                       </p>
                     )}
-                    {params.id === "5" &&
+                    {id === "5" &&
                       item.instructionManuals &&
                       item.instructionManuals.length > 0 && (
                         <div className="mt-4">
