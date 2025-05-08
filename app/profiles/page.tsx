@@ -43,6 +43,7 @@ export default function ProfilesPage() {
       role: "Parent",
       tasksCompleted: 15,
       avatar: "/placeholder.svg?height=100&width=100",
+      favoriteColor: "#FF5733",
     },
     {
       id: "2",
@@ -50,6 +51,7 @@ export default function ProfilesPage() {
       role: "Parent",
       tasksCompleted: 18,
       avatar: "/placeholder.svg?height=100&width=100",
+      favoriteColor: "#33FF57",
     },
     {
       id: "3",
@@ -57,6 +59,7 @@ export default function ProfilesPage() {
       role: "Child",
       tasksCompleted: 8,
       avatar: "/placeholder.svg?height=100&width=100",
+      favoriteColor: "#3357FF",
     },
     {
       id: "4",
@@ -64,6 +67,7 @@ export default function ProfilesPage() {
       role: "Child",
       tasksCompleted: 6,
       avatar: "/placeholder.svg?height=100&width=100",
+      favoriteColor: "#F333FF",
     },
   ]);
 
@@ -72,6 +76,7 @@ export default function ProfilesPage() {
     name: "",
     role: "Child",
     avatar: "/placeholder.svg?height=100&width=100",
+    favoriteColor: "#FF5733",
   });
 
   // Add new family member
@@ -92,6 +97,7 @@ export default function ProfilesPage() {
       name: "",
       role: "Child",
       avatar: "/placeholder.svg?height=100&width=100",
+      favoriteColor: "#FF5733",
     });
 
     // Close dialog
@@ -205,6 +211,26 @@ export default function ProfilesPage() {
                         </SelectContent>
                       </Select>
                     </div>
+                    <div className="grid gap-2">
+                      <Label htmlFor="member-color">Favorite Color</Label>
+                      <div className="flex gap-2 items-center">
+                        <Input
+                          id="member-color"
+                          type="color"
+                          value={newMember.favoriteColor}
+                          onChange={(e) =>
+                            setNewMember({
+                              ...newMember,
+                              favoriteColor: e.target.value,
+                            })
+                          }
+                          className="w-12 h-12 p-1"
+                        />
+                        <span className="text-sm text-muted-foreground">
+                          {newMember.favoriteColor}
+                        </span>
+                      </div>
+                    </div>
                   </div>
                   <DialogFooter>
                     <Button type="submit">Add Family Member</Button>
@@ -215,7 +241,14 @@ export default function ProfilesPage() {
           </div>
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
             {familyMembers.map((member) => (
-              <Card key={member.id} className="overflow-hidden">
+              <Card
+                key={member.id}
+                className="overflow-hidden transition-colors"
+                style={{
+                  backgroundColor: `${member.favoriteColor}15`,
+                  borderColor: `${member.favoriteColor}30`,
+                }}
+              >
                 <CardHeader className="p-0">
                   <div className="bg-muted h-24 flex items-center justify-center">
                     <Image
